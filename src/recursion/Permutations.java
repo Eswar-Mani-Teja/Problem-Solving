@@ -42,6 +42,24 @@ public class Permutations {
         return result;
     }
 
+    private static void swap(int[] arr, int x, int y) {
+        int temp = arr[x];
+        arr[x] = arr[y];
+        arr[y] = temp;
+    }
+
+    private void permutate(int[] arr, int start) {
+        if (arr.length == start) {
+            System.out.println(Arrays.toString(arr));
+            return;
+        }
+        for (int i = start; i < arr.length; i++) {
+            swap(arr, start, i);
+            permutate(arr, start + 1);
+            swap(arr, i, start);
+        }
+    }
+
     private static void testPermutations() {
         Permutations permutations = new Permutations();
         permutations.printAllPermutations(new ArrayList<>(),
@@ -55,6 +73,8 @@ public class Permutations {
         System.out.println("---");
         permutations.getAllPermutations(
                 Arrays.asList("x", "y", "z")).forEach(System.out::println);
+        System.out.println("---");
+        permutations.permutate(new int[] {4, 5, 6}, 0);
     }
 
     public static void main(String[] args) {
