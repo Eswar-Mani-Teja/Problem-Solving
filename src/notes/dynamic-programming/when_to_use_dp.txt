@@ -1,0 +1,60 @@
+When to use DP
+
+What makes a problem a good candidate for dynamic programming?
+    1. The problem can be broken down into 'overlapping sub-problems'
+       smaller versions of the original problem that are re-used
+       multiple times
+    2. The problem has an 'optimal substructure' - an optimal solution
+       formed from optimal solutions to the overlapping sub-problems
+       of the original problem
+
+Characteristics of DP
+    1. The problem will ask for the optimum value(maximum or minimum) of
+       something, or the number of ways there are to do something.
+       For example,
+       * What is the minimum cost of doing...
+       * What is the maximum profit from...
+       * How many ways are there to do...
+       * What is the longest possible...
+       * Is it possible to reach a certain point...
+    2. The future "decisions" depend on earlier decisions. Deciding to do
+       something at one step may affect the ability to do something in a later
+       step. This characteristic is what makes a "greedy algorithm" invalid for
+       a DP problem
+
+
+------------------------------------------------------------------------------------------
+
+House Robber is an excellent example of a dynamic programming problem.
+    The problem description is:
+        You are a professional robber planning to rob houses along a street.
+        Each house has a certain amount of money stashed, the only constraint
+        stopping you from robbing each of them is that adjacent houses have
+        security systems connected and it will automatically contact the police
+        if two adjacent houses were broken into on the same night.
+
+        Given an integer array nums representing the amount of money of each house,
+        return the maximum amount of money you can rob tonight without alerting the police.
+
+In this problem, each decision will affect what options are available to the robber in
+the future. For example, with the test nums=[2,7,9,3,1], the optimal
+solution is to rob the houses with 2,9 and 1 money. However, if we were to iterate
+from left to right in a greedy manner, our first decision would be whether to rob the
+first or second house. 7 is way more money than 2, so if we were greedy, we would
+choose to rob house 7. However, this prevents us from robbing the house with 9
+money. As you can see, our decision between robbing the first or second house
+affects which options are available for future decisions.
+
+-- Longest Increasing Subsequence is another example of a classic DP
+nums = [1,2,6,3,5]
+result -> 4
+[1,2,3,5]
+
+Summary:
+    If a problem is asking for "the maximum/minimum/longest/shortest of something,
+    the number of ways to do something, or if it is possible to reach a certain point", it is probably
+    greedy or DP. With time and practice, it will become easier to identify which is the better approach
+    for a given problem. Although, in general, if the problem has constraints that cause
+    decisions to affect other decisions, such as "using one element prevents the usage of other elements",
+    then we should consider using dynamic programming to solve the problem.
+    --These two characteristics can be used to identify if a problem should be solved with DP--

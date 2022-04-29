@@ -1,0 +1,34 @@
+There are two ways to implement a DP algorithm
+    1. Bottom-up, a.k.a. 'Tabulation'
+    2. Top-down, a.k.a. 'Memoization'
+
+Bottom-up (Tabulation)
+    Implemented with 'iteration' and starts with base cases
+    [Base case -> Result]
+
+    Example: Fibonacci sequence
+    // Pseudo-code
+    F = array of length(n+1)
+    F[0] = 0;
+    F[1] = 1;
+    for i in range(2, n):
+        F[i] = F[i -1] + F[i - 2]
+
+Top-down (Memoization)
+    Implemented with 'recursion' and made efficient with memoization
+    [Result case, Result case - 1, .... Base case]
+
+    Example: Fibonacci sequence
+    If we wanted to find the nth fibonacci number F(n),
+    we try to compute this by finding F(n-1) and F(n-2)
+    This defines a recursive pattern that will continue on
+    until we reach the base cases F(0) = F(1) = 1
+
+    // Pseudo-code
+    memo = hashmap
+    Function F(integer n):
+        if n is 0 or 1:
+            return 1
+        if !memo.contains(n):
+            memo[n] = F(n-1) + F(n-2)
+        return memo[n]
