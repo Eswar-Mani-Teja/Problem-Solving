@@ -30,8 +30,8 @@ public class HRobber {
     public int getMaximumLootValueMEMO(int[] houses, int current, int[] memo) {
         if (current >= houses.length) return 0;
         if (memo[current] == 0) {
-            int adjacentLoot = getMaximumLootValueMEMO(houses, current + 1, new int[houses.length]);
-            int currentLoot = getMaximumLootValueMEMO(houses, current + 2, new int[houses.length]) + houses[current];
+            int adjacentLoot = getMaximumLootValueMEMO(houses, current + 1, memo);
+            int currentLoot = getMaximumLootValueMEMO(houses, current + 2, memo) + houses[current];
             memo[current] = max(currentLoot, adjacentLoot);
         }
         return memo[current];
