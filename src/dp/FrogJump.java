@@ -26,6 +26,7 @@ public class FrogJump {
         int minEnergy = frog.getMinimumEnergyTBS(height, n - 1);
         System.out.println("Minimum Energy: " + minEnergy + " [TBS]");
         System.out.println("Minimum Energy: " + frog.getMinimumEnergy(height, n - 1, new int[n]) + " [memo]");
+        System.out.println("Minimum Energy: " + frog.getMinimumEnergyWithVariableStepSize(height, n - 1, 2) + " [variable-k]");
         Log.callSummaries();
     }
 
@@ -93,5 +94,31 @@ public class FrogJump {
             prev1 = current;
         }
         return prev1;
+    }
+
+
+    // Frog Jump size: [1 ... maxStepSize]
+    private int getMinimumEnergyWithVariableStepSize(int[] height, int n, int maxStepSize) {
+        if (n <= 0) return 0;
+        int energyToFirstStep = getJumpEnergy(height, 0, 1);
+        if (n == 1) return energyToFirstStep;
+        int[] memo = new int[height.length];
+        memo[0] = 0;
+        memo[1] = energyToFirstStep;
+        int currentStep;
+        for (currentStep = 2; currentStep <= n; currentStep++) {
+
+            int minEnergyToCurrentStep = Integer.MAX_VALUE;
+            int startStep = currentStep - 1;
+            for (int stepSize = 1;
+                 stepSize <= maxStepSize && startStep >= 0;
+                 stepSize++) {
+                startStep = currentStep - stepSize;
+                int stepEnergy = memo[startStep] + getJumpEnergy(height, startStep, currentStep);
+                if (stepEnergy < minEnergyToCurrentStep) minEnergyToCurrentStep = stepEnergy;
+            }
+            memo[currentStep] = minEnergyToCurrentStep;
+        }
+        return memo[currentStep - 1];
     }
 }
