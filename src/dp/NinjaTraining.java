@@ -14,6 +14,8 @@ public class NinjaTraining {
         maxMeritPoints = getMaximumMeritPoints(meritPoints, numberOfTrainingDays, -1,
                 new int[numberOfTrainingDays][meritPoints[0].length]);
         System.out.println("Maximum Merit Points: " + maxMeritPoints + " [MEMO-F]");
+        maxMeritPoints = getMaxMeritPoints(meritPoints, numberOfTrainingDays);
+        System.out.println("Maximum Merit Points: " + maxMeritPoints + " [TAB]");
         Log.callSummaries();
     }
 
@@ -58,5 +60,36 @@ public class NinjaTraining {
             memo[day][nextAct] = maxMeritPoint;
         }
         return maxMeritPoint;
+    }
+
+
+    //Tabulation
+    private static int getMaxMeritPoints(int[][] points, int days) {
+        int activities = points[0].length;
+        int[] currentMemo = new int[activities];
+        int[] prevMemo = new int[activities];
+        for (int day = 0; day < days; day++) {
+            for (int currentAct = 0; currentAct < activities; currentAct++) {
+                int pointMax = Integer.MIN_VALUE;
+                for (int prevAct = 0; prevAct < activities; prevAct++) {
+                    if (currentAct != prevAct) {
+                        int point = prevMemo[prevAct] + points[day][currentAct];
+                        if (point > pointMax) {
+                            pointMax = point;
+                            currentMemo[currentAct] = point;
+                        }
+                    }
+                }
+            }
+            int[] temp = prevMemo;
+            prevMemo = currentMemo;
+            currentMemo = temp;
+        }
+        int maxMeritPoints = Integer.MIN_VALUE;
+        for (int i = 0; i < activities; i++) {
+            if (maxMeritPoints < prevMemo[i])
+                maxMeritPoints = prevMemo[i];
+        }
+        return maxMeritPoints;
     }
 }
