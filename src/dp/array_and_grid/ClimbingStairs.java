@@ -1,4 +1,4 @@
-package dp;
+package dp.array_and_grid;
 
 import utils.Log;
 

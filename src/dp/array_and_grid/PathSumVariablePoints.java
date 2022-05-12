@@ -1,4 +1,4 @@
-package dp;
+package dp.array_and_grid;
 
 public class PathSumVariablePoints {
     public static void main(String[] args) {
