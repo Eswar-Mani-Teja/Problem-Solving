@@ -76,6 +76,7 @@ public class SubsetSumMatchingTarget {
         for (int i = 0; i < n; i++) {
             memo[i][0] = true;
         }
+        // Can 'target' be formed till 'arr[index]' (index: 0 -> currentIndex)
         for (int index = 1; index < n; index++) {
             for (int target = 1; target <= k; target++) {
                 int targetIndex = target - arr[index];
