@@ -6,6 +6,33 @@ import java.util.Arrays;
 
 public class SubsetSumMatchingTarget {
     public static void main(String[] args) {
+        checkIfSubsetSumEqualsTarget();
+        countSubsetsWithSumEqualToK();
+
+        Log.callSummaries();
+    }
+
+    // Driver
+    private static void countSubsetsWithSumEqualToK() {
+        int[] arr = new int[]{1, 2, 2, 3};
+        int k = 3;
+        int n = arr.length;
+        String outputFormat = "No. of Subsets with sum %d for %s is: %d [%s]%n";
+        int count = countSubsetsWithSumK(n - 1, k, arr);
+        System.out.printf(outputFormat, k, Arrays.toString(arr), count, "BF-REC");
+
+        count = countSubsetsWithSumK(n - 1, k, arr, new int[n][k + 1]);
+        System.out.printf(outputFormat, k, Arrays.toString(arr), count, "REC-memo");
+
+        count = countSubsetsWithSumK_TAB(n, k, arr);
+        System.out.printf(outputFormat, k, Arrays.toString(arr), count, "TAB");
+
+        count = countSubsetsWithSumK_TAB_SO(n, k, arr);
+        System.out.printf(outputFormat, k, Arrays.toString(arr), count, "TAB-SO");
+    }
+
+    // Driver
+    private static void checkIfSubsetSumEqualsTarget() {
         int[] arr = new int[]{4, 3, 2, 1};
         int k = 5;
         boolean result = subsetSumToK(arr, k, 0);
@@ -24,7 +51,6 @@ public class SubsetSumMatchingTarget {
         result = subsetSumToK_TAB_SO(k, arr.length - 1, arr);
         System.out.printf(outputFormat, k, Arrays.toString(arr), result, "TAB-SO");
 
-        Log.callSummaries();
     }
 
 
@@ -104,6 +130,76 @@ public class SubsetSumMatchingTarget {
                 boolean skip = prev[target];
                 boolean pick = targetIndex >= 0 && prev[targetIndex];
                 current[target] = pick || skip;
+            }
+            prev = current;
+        }
+        return prev[k];
+    }
+
+    //----------------------------------------------------------------------------------------------//
+
+    // Recursion
+    private static int countSubsetsWithSumK(int index, int target, int[] arr) {
+        Log.callCounter("BF-REC");
+        if (target == 0) return 1;
+        if (index < 0) return 0;
+        if (target < 0) return 0;
+        int pick = countSubsetsWithSumK(index - 1, target - arr[index], arr);
+        int skip = countSubsetsWithSumK(index - 1, target, arr);
+        return pick + skip;
+    }
+
+
+    // Recursion - Memoization
+    private static int countSubsetsWithSumK(int index, int target, int[] arr, int[][] memo) {
+        Log.callCounter("REC-MEMO");
+        if (target == 0) return 1;
+        if (index < 0) return 0;
+        if (target < 0) return 0;
+        if (memo[index][target] != 0) return memo[index][target];
+        int pick = countSubsetsWithSumK(index - 1, target - arr[index], arr, memo);
+        int skip = countSubsetsWithSumK(index - 1, target, arr, memo);
+        return memo[index][target] = pick + skip;
+    }
+
+
+    // Tabulation
+    private static int countSubsetsWithSumK_TAB(int n, int k, int[] arr) {
+        int[][] memo = new int[arr.length][k + 1];
+        if (arr[0] <= k) { // out of bounds check
+            // Target == arr[0]
+            memo[0][arr[0]] = 1;
+        }
+        // Subsets that can form sum = 0 at any index
+        for (int i = 0; i < n; i++) {
+            memo[i][0] = 1;
+        }
+        for (int index = 1; index < memo.length; index++) {
+            for (int target = 1; target <= k; target++) {
+                int pick = target >= arr[index] ? memo[index - 1][target - arr[index]] : 0;
+                int skip = memo[index - 1][target];
+                memo[index][target] = pick + skip;
+            }
+        }
+        return memo[n - 1][k];
+    }
+
+
+    // Tabulation - Space Optimized
+    private static int countSubsetsWithSumK_TAB_SO(int n, int k, int[] arr) {
+        int[] prev = new int[k + 1];
+        int[] current = new int[k + 1];
+        if (arr[0] <= k) { // out of bounds check
+            // Target == arr[0]
+            prev[arr[0]] = 1;
+        }
+        // Subsets that can form sum = 0 at any index
+        prev[0] = current[0] = 1;
+        for (int index = 1; index < arr.length; index++) {
+            for (int target = 1; target <= k; target++) {
+                int pick = target >= arr[index] ? prev[target - arr[index]] : 0;
+                int skip = prev[target];
+                current[target] = pick + skip;
             }
             prev = current;
         }
